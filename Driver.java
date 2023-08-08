@@ -14,8 +14,8 @@ public class Driver {
         Class.forName(dbClassName);
 
         //Database credentials
-        final String USER = "root";
-        final String PASS = "Iamagerbie123*";
+        final String USER = "YOUR MYSQL USER";
+        final String PASS = "YOUR MYSQL PASSWORD";
 
         try {
             if(signal == 1) {
@@ -54,15 +54,16 @@ public class Driver {
         System.out.println("---------------------------------------------------------\n");
 
         while(true){
-            System.out.println("What would you like to do? Enter the appropriate number. \n[test]: Show Users.\n[q]: Quit the System\n[1]: Create New User Profile\n[2]: Delete User Profile\n[3]: Log In\n[4]: Run Queries\n");
+            System.out.println("What would you like to do? Enter the appropriate number.\n[q]: Quit the System\n[1]: Create New User Profile\n[2]: Delete User Profile\n[3]: Log In\n[4]: Run Queries\n");
             input = scanner.nextLine();
 
             //creating new user profile
-            if(input.equals("test")){
-                mybnb_db.get_users(connection);
-            }
+            // if(input.equals("test")){
+            //    mybnb_db.get_users(connection);
+            //}
+
             //quiting the system/signing out
-            else if(input.equals("q")){
+            if(input.equals("q")){
                 connection = logging_handler(0, connection);
                 if(connection == null){
                     System.out.println("SHUTTING DOWN MYBNB.\n\nHave a nice day! :)");
