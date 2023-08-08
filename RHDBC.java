@@ -164,7 +164,8 @@ public class RHDBC {
 
             int rowsAffected = pstmt.executeUpdate();
             if (rowsAffected <= 0) {
-                System.out.println("Failed to user ratings.");
+                System.err.println("\n[Failed to delete " +
+                        "user ratings OR no user ratings found.]\n");
             }
 
             sql = "DELETE FROM Records WHERE SIN=? AND role=?;";
@@ -174,7 +175,7 @@ public class RHDBC {
 
             rowsAffected = pstmt.executeUpdate();
             if (rowsAffected <= 0) {
-                System.out.println("Failed to user records.");
+                System.err.println("\n[Failed to delete user records OR no user ratings found.]\n");
             }
 
             sql = "DELETE FROM Users WHERE SIN=? AND role=?;";
@@ -186,7 +187,7 @@ public class RHDBC {
             if (rowsAffected > 0) {
                 System.out.println("User successfully deleted.");
             } else {
-                System.out.println("Failed to delete user.");
+                System.err.println("\n[Failed to delete user OR no user found.]\n");
             }
 
         } catch (SQLException e) {
@@ -942,7 +943,7 @@ public class RHDBC {
             if(rowsAffected > 0){
                 System.out.println("\n****** SUCCESSFUL ******\n");
             } else {
-                System.out.println("[DATE NOT FOUND] Try Again.");
+                System.out.println("[DATE NOT FOUND] Try Again.\n[NOTE]: You cannot change the price of a date that has already been booked.\n");
             }
 
         } catch (SQLException e) {
@@ -1252,3 +1253,4 @@ public class RHDBC {
         }
     }
 }
+
