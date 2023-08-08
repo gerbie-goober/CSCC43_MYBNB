@@ -164,7 +164,6 @@ public class QDBC {
             return;
         }
 
-        System.out.println(query);
 
         try(PreparedStatement psmt = connection.prepareStatement(query)){
             psmt.setFloat(1, latitude);
