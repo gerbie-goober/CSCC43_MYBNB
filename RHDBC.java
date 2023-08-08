@@ -1053,10 +1053,12 @@ public class RHDBC {
             }
 
         } catch(SQLException e){
-            System.out.println("[ERROR IN SUBMITTING REVIEW]");
+            System.out.println("\n[ERROR IN SUBMITTING REVIEW]: ");
             if(e.getMessage().contains("Duplicate entry")){
                 System.out.println("You have already rated USER ID: " + SIN_receiver + ". You cannot rate them again.\n");
+                return;
             }
+            System.out.println(e.getMessage() + "\n");
         }
     }
     public boolean view_renters(Connection connection, User current_user){
@@ -1141,7 +1143,7 @@ public class RHDBC {
                 hosts_found = rs.next();
             }
         } catch (SQLException e) {
-            System.err.println("Error when trying to find renters for listing: " + e.getMessage());
+            System.err.println("Error when trying to find hosts for listing: " + e.getMessage());
         }
         return true;
     }
@@ -1239,10 +1241,5 @@ public class RHDBC {
             }
         }
     }
-
-
-
-
-
 }
 
