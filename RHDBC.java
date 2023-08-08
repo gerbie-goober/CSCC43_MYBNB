@@ -635,6 +635,7 @@ public class RHDBC {
             if(date_avail.equals("q") || date_avail.equals("")){
                 break;
             }
+            check_date(connection, date_avail);
 
             System.out.println("Please enter the price associated for this date.\n[NOTE] Accepted Price Format: XXXXX.XX");
             price = Float.parseFloat(scanner.nextLine());
