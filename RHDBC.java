@@ -350,7 +350,7 @@ public class RHDBC {
     public void view_bookings(Connection connection, User current_user){
         try {
             //Execute a query
-            String sql = "SELECT * FROM Records WHERE role='renter' AND SIN=? AND is_booked=true AND is_cancelled=false AND (RID) NOT IN (SELECT RID FROM Records WHERE is_cancelled=true);";
+            String sql = "SELECT * FROM Records WHERE role='renter' AND SIN=? AND is_booked=true AND is_cancelled=false AND is_unavail=false AND (RID) NOT IN (SELECT RID FROM Records WHERE is_cancelled=true);";
             PreparedStatement pstmt = connection.prepareStatement(sql);
             pstmt.setInt(1, current_user.getSIN());
             ResultSet rs = pstmt.executeQuery();
