@@ -153,11 +153,14 @@ public class RHDBC {
         System.out.println("What is the user's SIN?");
         SIN = Integer.parseInt(scanner.nextLine());
 
+
         try {
-            String sql = "DELETE FROM Ratings WHERE SIN=? AND role=?;";
+            String sql = "DELETE FROM Ratings WHERE (SIN_receiver=? AND role_receiver=?) OR (SIN_writer=? AND role_writer=?);";
             PreparedStatement pstmt = connection.prepareStatement(sql);
             pstmt.setInt(1, SIN);
             pstmt.setString(2, role);
+            pstmt.setInt(3, SIN);
+            pstmt.setString(4, role);
 
             int rowsAffected = pstmt.executeUpdate();
             if (rowsAffected <= 0) {
@@ -805,46 +808,52 @@ public class RHDBC {
         System.out.println("\n*--------------------- ALL SET! ---------------------*\n");
     }
     public void handle_remove_listing(Connection connection, Scanner scanner, User current_user){
+        int LID_to_delete;
+        view_listings(connection, scanner, current_user);
         System.out.println("Which listing would you like to remove? Enter the Listing ID.");
         String input = scanner.nextLine();
-        if(input.equals("")){
-            return;
-        }
-        int LID_to_delete = Integer.parseInt(input);
-
-        if(is_booked(connection, LID_to_delete)){
-            System.out.println("This listing is currently booked by someone. You cannot delete this listing.");
-            return;
-        }
-
-        //if listing is not currently being booked by a renter, then delete listing in records and in listings
-        //remove trace of listing in records
-        try{
-            String sql = "DELETE FROM Records WHERE LID=? and role='host';";
-            PreparedStatement pstmt = connection.prepareStatement(sql);
-            pstmt.setInt(1, LID_to_delete);
-            pstmt.executeUpdate();
-
-        } catch(SQLException e){
-            System.out.println("Error in trying to find listing ID: " + LID_to_delete + " in Records. \nError: " + e.getMessage());
-            return;
-        }
-
-        //remove listing from Listings
-        try{
-            String sql = "DELETE FROM Listings WHERE LID=?;";
-            PreparedStatement pstmt = connection.prepareStatement(sql);
-            pstmt.setInt(1, LID_to_delete);
-            int rowsAffected = pstmt.executeUpdate();
-            if(rowsAffected > 0){
-                System.out.println("\n*---------- LISTING ID: " + LID_to_delete + " SUCCESSFULLY DELETED ----------*\n");
-            } else {
-                System.out.println("\n*---------- LISTING ID: " + LID_to_delete + " DOES NOT EXIST ----------*\n");
+        try {
+            if(input.equals("")){
+                return;
+            }
+            LID_to_delete = Integer.parseInt(input);
+            if(is_booked(connection, LID_to_delete)){
+                System.out.println("This listing is currently booked by someone. You cannot delete this listing.\nOR this listing does not exist.");
+                return;
             }
 
-        } catch(SQLException e){
-            System.out.println("Error in trying to delete listing ID: " + LID_to_delete + " in Listings. \nError: " + e.getMessage());
-            return;
+            //if listing is not currently being booked by a renter, then delete listing in records and in listings
+            //remove trace of listing in records
+            try{
+                String sql = "DELETE FROM Records WHERE LID=? and role='host';";
+                PreparedStatement pstmt = connection.prepareStatement(sql);
+                pstmt.setInt(1, LID_to_delete);
+                pstmt.executeUpdate();
+
+            } catch(SQLException e){
+                System.out.println("Error in trying to find listing ID: " + LID_to_delete + " in Records. \nError: " + e.getMessage());
+                return;
+            }
+
+            //remove listing from Listings
+            try{
+                String sql = "DELETE FROM Listings WHERE LID=?;";
+                PreparedStatement pstmt = connection.prepareStatement(sql);
+                pstmt.setInt(1, LID_to_delete);
+                int rowsAffected = pstmt.executeUpdate();
+                if(rowsAffected > 0){
+                    System.out.println("\n*---------- LISTING ID: " + LID_to_delete + " SUCCESSFULLY DELETED ----------*\n");
+                } else {
+                    System.out.println("\n*---------- LISTING ID: " + LID_to_delete + " DOES NOT EXIST ----------*\n");
+                }
+
+            } catch(SQLException e){
+                System.out.println("Error in trying to delete listing ID: " + LID_to_delete + " in Listings. \nError: " + e.getMessage());
+                return;
+            }
+
+        } catch(NumberFormatException e){
+            System.out.println("[INVALID INPUT]: " + e.getMessage());
         }
     }
     public void handle_edit_listing(Connection connection, Scanner scanner, User current_user){
@@ -1242,4 +1251,3 @@ public class RHDBC {
         }
     }
 }
-
